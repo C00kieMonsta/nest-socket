@@ -10,7 +10,8 @@ import {
 import { Logger } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway()
+// you can specify the port number if you do not want to serve WS on same port as nest app
+@WebSocketGateway(3001)
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   @WebSocketServer() wss: Server;
@@ -30,14 +31,14 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   }
 
   // message sent to original emitter
-  @SubscribeMessage('messageToServer')
-  handleMessage(client: Socket, text: string): WsResponse<string> {
-    return { event: 'messageToClient', data: text };
-  }
+  // @SubscribeMessage('messageToServer')
+  // handleMessage(client: Socket, text: string): WsResponse<string> {
+  //   return { event: 'messageToClient', data: text };
+  // }
 
   // message sent to all
-  /*@SubscribeMessage('messageToServer')
+  @SubscribeMessage('messageToServer')
   handleMessageToAll(client: any, text: any): void {
     this.wss.emit('messageToClient', text);
-  }*/
+  }
 }

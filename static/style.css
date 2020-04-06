@@ -29,7 +29,7 @@ h1 {
 }
 
 div#change_username,
-section#input_zone {
+form#input_zone {
     border: 5px outset #8258FA;
 }
 
@@ -45,7 +45,7 @@ section#chatroom {
     overflow: auto;
 }
 
-section#input_zone {
+form#input_zone {
     height: 7%;
     text-align: center;
     background-color: #BCA9F5;
