@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Content Served by NestJS Server</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
+</head>
+
+<body>
+    <div id="v-app" style="height: 100%;">
+        <header>
+            <h1>{{title}}</h1>
+        </header>
+    
+        <section id="chatroom">
+            <section id="feedback">
+                <p class="message" v-for="msg of messages">{{msg}}</p>
+            </section>
+        </section>
+    
+        <section id="input_zone">
+            <input id="message" class="vertical-align" type="text" v-model="text" />
+            <button id="send_message" class="vertical-align" type="button">Send</button>
+        </section>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
