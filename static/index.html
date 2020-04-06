@@ -7,24 +7,31 @@
     <title>Static Content Served by NestJS Server</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
-    <script src="http://localhost:3001/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
-    <div id="v-app" style="height: 100%;">
+    <div id="v-app" style="height: 90%;">
         <header>
-            <h1>{{title}}</h1>
+            <h1>Testing Sockets</h1>
         </header>
+
+        <section>
+            <div id="change_username">
+              <input id="username" type="text" v-model="usernameInput"/>
+              <button @click.prevent="changeUsername()" id="send_username" type="button">Change username</button>
+            </div>
+          </section>
     
         <section id="chatroom">
             <section id="feedback">
-                <p class="message" v-for="msg of messages">{{msg}}</p>
+                <p class="message" v-for="msg of messages">{{msg.sender}}: {{msg.message}}</p>
             </section>
         </section>
     
         <form id="input_zone">
-            <input id="message" class="vertical-align" type="text" v-model="text" />
-            <button @click.prevent="sendMessage()" id="send_message" class="vertical-align" type="submit">Send</button>
+            <input id="message" class="vertical-align" type="text" v-model="message" />
+            <button @click.prevent="sendChatMessage()" id="send_message" class="vertical-align" type="submit">Send</button>
         </form>
     </div>
     <script src="app.js"></script>
