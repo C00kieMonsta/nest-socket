@@ -6,33 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Static Content Served by NestJS Server</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://unpkg.com/vue-simple-notify/dist/vue-simple-notify.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue-simple-notify/dist/vue-simple-notify.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
-    <div id="v-app" style="height: 90%;">
-        <header>
-            <h1>Testing Sockets</h1>
-        </header>
+    <div id="v-app">
 
-        <section>
+        <div class="chat">
             <div id="change_username">
-              <input id="username" type="text" v-model="usernameInput"/>
-              <button @click.prevent="changeUsername()" id="send_username" type="button">Change username</button>
+                <input id="username" type="text" v-model="usernameInput" />
+                <button @click.prevent="changeUsername()" id="send_username" type="button">Change username</button>
             </div>
-          </section>
-    
-        <section id="chatroom">
-            <section id="feedback">
-                <p class="message" v-for="msg of messages">{{msg.sender}}: {{msg.message}}</p>
-            </section>
-        </section>
-    
-        <form id="input_zone">
-            <input id="message" class="vertical-align" type="text" v-model="message" />
-            <button @click.prevent="sendChatMessage()" id="send_message" class="vertical-align" type="submit">Send</button>
-        </form>
+            <div id="chatroom">
+                <div id="feedback">
+                    <p class="message" v-for="msg of messages">{{msg.sender}}: {{msg.message}}</p>
+                </div>
+            </div>
+            <form id="input_zone">
+                <input id="message" class="vertical-align" type="text" v-model="message" />
+                <button @click.prevent="sendChatMessage()" id="send_message" class="vertical-align"
+                    type="submit">Send</button>
+            </form>
+        </div>
+
+        <div class="alerts">
+            <alerts-component :items="alerts"></alerts-component>
+        </div>
+
     </div>
     <script src="app.js"></script>
 </body>

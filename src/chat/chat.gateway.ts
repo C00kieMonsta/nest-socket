@@ -10,7 +10,7 @@ import {
 import { Logger } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway()
+@WebSocketGateway({ namespace: '/chat' })
 export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   @WebSocketServer() wss: Server;
@@ -31,8 +31,8 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   // message sent to all
   @SubscribeMessage('chatToServer')
-  handleMessageToAll(client: any, message: {sender: string, message: string}): void {
-    this.wss.emit('chatToClient', message);
+  handleMessageToAll(client: any, msg: {sender: string, message: string}): void {
+    this.wss.emit('chatToClient', msg);
   }
 
 }

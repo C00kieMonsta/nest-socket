@@ -1,3 +1,7 @@
+// creating Vue component
+Vue.component('alerts-component', VueSimpleNotify.VueSimpleNotify);
+
+// Vue app instance
 var app = new Vue({
     el: '#v-app',
     data: {
@@ -5,6 +9,7 @@ var app = new Vue({
         username: '',
         message: '',
         messages: [],
+        alerts: [],
         socket: {
             chat: null,
             alerts: null
@@ -12,14 +17,17 @@ var app = new Vue({
     },
     methods: {
         sendChatMessage() {
-            if (this.text === '' ) return;
-            console.log(`sent: ${this.text}`);
-            this.socket.chat.emit('chatToServer', this.text);
-            this.text = '';
+            if (this.message === '' ) return;
+            console.log(`sent: ${this.message}`);
+            this.socket.chat.emit('chatToServer', { sender: this.username, message: this.message });
+            this.message = '';
         },
         receiveChatMessage(msg) {
             console.log(`received: ${msg}`);
             this.messages.push(msg);
+        },
+        receiveAlertMessage(msg) {
+            this.alerts.push(msg);
         },
         changeUsername() {
             this.username = this.usernameInput;
@@ -36,10 +44,13 @@ var app = new Vue({
         })
 
         this.socket.chat = io('http://localhost:3000/chat'); // create socket io client for chats
-        this.socket.chat.on('chatToClient', (msg) => { // listener on messageToClient event
+        this.socket.chat.on('chatToClient', (msg) => { // listener on chatToClient event
             this.receiveChatMessage(msg);
         });
 
-        this.socket.alerts = io('http://localhost:3000/alerts'); // create socket io client for alerts
+        this.socket.alerts = io('http://localhost:3000/alert'); // create socket io client for alerts
+        this.socket.alerts.on('alertToClient', (msg) => { // listener on alertToClient event
+            this.receiveAlertMessage(msg);
+        });
     }
 });

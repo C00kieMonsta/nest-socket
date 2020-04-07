@@ -1,9 +1,13 @@
-import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
+import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { Server } from 'socket.io';
 
-@WebSocketGateway()
+@WebSocketGateway({ namespace: '/alert' })
 export class AlertsGateway {
-  @SubscribeMessage('message')
-  handleMessage(client: any, payload: any): string {
-    return 'Hello world!';
+
+  @WebSocketServer() wss: Server;
+
+  sendToAll(message: string) {
+    this.wss.emit('alertToClient', { type: 'Alert', message });
   }
+
 }
