@@ -8,23 +8,34 @@ var app = new Vue({
         usernameInput: '',
         username: '',
         message: '',
-        messages: [],
+        messages: {
+            general: [],
+            funnyThings: []
+        },
         alerts: [],
+        activeRoom: 'general',
+        rooms: {
+            general: false,
+            funnyThings: false,
+        },
         socket: {
             chat: null,
             alerts: null
         }
     },
     methods: {
+
         sendChatMessage() {
             if (this.message === '' ) return;
-            console.log(`sent: ${this.message}`);
-            this.socket.chat.emit('chatToServer', { sender: this.username, message: this.message });
-            this.message = '';
+            if (this.isMemberOfActiveRoom) {
+                this.socket.chat.emit('chatToServer', { sender: this.username, room: this.activeRoom, message: this.message });
+                this.message = "";
+            } else {
+                alert('You must join the room before sending messages!');
+            }
         },
         receiveChatMessage(msg) {
-            console.log(`received: ${msg}`);
-            this.messages.push(msg);
+            this.messages[msg.room].push(msg);
         },
         receiveAlertMessage(msg) {
             this.alerts.push(msg);
@@ -32,20 +43,36 @@ var app = new Vue({
         changeUsername() {
             this.username = this.usernameInput;
             this.usernameInput = '';
+        },
+        toggleRoomMembership() {
+            if (this.isMemberOfActiveRoom) {
+                this.socket.chat.emit('leaveRoom', this.activeRoom);
+            } else {
+                this.socket.chat.emit('joinRoom', this.activeRoom);
+            }
+        }
+    },
+    computed: {
+        isMemberOfActiveRoom() {
+            return this.rooms[this.activeRoom];
         }
     },
     created() { // Vue JS Hook
 
         this.username = prompt('Enter your username');
 
-        this.messages.push({
-            sender: this.username,
-            message: `Session opened at ${new Date().toLocaleDateString()}`
-        })
-
         this.socket.chat = io('http://localhost:3000/chat'); // create socket io client for chats
         this.socket.chat.on('chatToClient', (msg) => { // listener on chatToClient event
             this.receiveChatMessage(msg);
+        });
+        this.socket.chat.on('connect', () => {
+            this.toggleRoomMembership();
+        });
+        this.socket.chat.on('joinedRoom', (room) => {
+            this.rooms[room] = true;
+        });
+        this.socket.chat.on('leftRoom', (room) => {
+            this.rooms[room] = false;
         });
 
         this.socket.alerts = io('http://localhost:3000/alert'); // create socket io client for alerts

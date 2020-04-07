@@ -16,13 +16,22 @@
     <div id="v-app">
 
         <div class="chat">
-            <div id="change_username">
-                <input id="username" type="text" v-model="usernameInput" />
-                <button @click.prevent="changeUsername()" id="send_username" type="button">Change username</button>
+            <div class="settings-panel">
+                <!-- Tabs -->
+                <div class="tab-row">
+                    <button class="tab-btn" :class="{ active: activeRoom == 'general' }"
+                        @click="activeRoom = 'general'">General</button>
+                    <button class="tab-btn" :class="{ active: activeRoom == 'funnyThings' }"
+                        @click="activeRoom = 'funnyThings'">Funny Stuff</button>
+                </div>
+                <div class="tab-row">
+                    Status: {{ isMemberOfActiveRoom ? 'Joined' : 'NOT Joined' }} <button
+                        @click="toggleRoomMembership()">{{ isMemberOfActiveRoom ? 'Leave' : 'Join' }}</button>
+                </div>
             </div>
             <div id="chatroom">
                 <div id="feedback">
-                    <p class="message" v-for="msg of messages">{{msg.sender}}: {{msg.message}}</p>
+                    <p class="message" v-for="msg of messages[activeRoom]">{{msg.sender}}: {{msg.message}}</p>
                 </div>
             </div>
             <form id="input_zone">
