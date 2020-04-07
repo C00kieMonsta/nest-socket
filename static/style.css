@@ -52,7 +52,7 @@ div#change_username {
 
 div#chatroom {
     border: 5px inset #8258FA;
-    height: 85%;
+    height: 75%;
     overflow: auto;
 }
 
@@ -109,4 +109,13 @@ p.message {
     flex: 1;
     border: 5px inset #8258FA;
     overflow: auto;
+}
+
+.tab-row {
+    padding-top: 20px;
+}
+
+.tab-btn.active {
+    background: blue;
+    color: white;
 }
